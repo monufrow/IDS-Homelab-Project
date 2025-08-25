@@ -12,10 +12,10 @@ Operating Systems:
 - Documentation and Version Control: Git, Github, and Markdown
 ## Project Architecture
 The homelab consists of three virtual machines connected on a dedicated Internal Network within VirtualBox (vlab_net), allowing them to communicate with each other while being isolated from the host machine's network. The Ubuntu-IDS VM is configured with a second network adapter (NAT) for internet access, crucial for time synchronization and software updates.
-![VirtualBox network settings for Attack Machine]("C:\Users\mitch\Documents\IDS-Homelab-Project\Network config\Kali-Network-Config.png") 
-![VirtualBox network settings for Vulnerable Machine]("C:\Users\mitch\Documents\IDS-Homelab-Project\Network config\Metasploitable-Network-Config.png") 
-![VirtualBox internal network settings for IDS Machine]("C:\Users\mitch\Documents\IDS-Homelab-Project\Network config\IDS-Network-Config-1.png") 
-![VirtualBox NAT network settings for IDS Machine]("C:\Users\mitch\Documents\IDS-Homelab-Project\Network config\IDS-Network-Config-2.png") 
+![VirtualBox network settings for Attack Machine]("\Network-config\Kali-Network-Config.png") 
+![VirtualBox network settings for Vulnerable Machine]("\Network-config\Metasploitable-Network-Config.png") 
+![VirtualBox internal network settings for IDS Machine]("\Network-config\IDS-Network-Config-1.png") 
+![VirtualBox NAT network settings for IDS Machine]("\Network-config\IDS-Network-Config-2.png") 
 ## Implimentation and Challenges Faced
 Building this homelab was a hands-on learning experience that involved navigating several common and complex system administration and network security challenges. Each obstacle provided an opportunity to deepen my understanding and refine my troubleshooting methodology.
 ### 1. Initial Network Connectivity and Static IP Configuration
@@ -35,15 +35,15 @@ Building this homelab was a hands-on learning experience that involved navigatin
 ### 4. IDS Traffic Visiility (Promiscuous Mode)
 - **Challenge:** Despite Suricata running without startup errors, the fast.log file remained empty even after running nmap scans from Kali to Metasploitable2. This suggested the IDS was not "seeing" the network traffic intended for other machines.
 - **Solution:** I identified the critical omission of promiscuous mode. By default, VMs only see traffic addressed to them. I configured the Ubuntu-IDS VM's network adapter in VirtualBox to "Allow All" promiscuous mode. This enabled the IDS to monitor all traffic passing through the Internal Network, ensuring it could effectively detect activity between Kali and Metasploitable2.
-![VirtualBox internal network settings for IDS Machine]("\Network config\IDS-Network-Config-1.png") 
+![VirtualBox internal network settings for IDS Machine]("\Network-config\IDS-Network-Config-1.png") 
 ### 5. Custom Rule Creation and Logging Validation
 - **Challenge:** After enabling promiscuous mode, the fast.log was still empty. Further investigation revealed that the default Suricata rules might not log simple nmap scans as alerts, and my initial attempts at custom rules resulted in "duplicate signature" and "error parsing signature" errors due to incorrect syntax and conflicting Signature IDs (SIDs).
 - **Soltuion:** This led me to research and develop a custom Suricata rule for my local.rules file. Through iterative testing and understanding proper rule syntax (eg., alert ip any any -> any any (msg:"IP Test Rule"; sid:123; rev:1;), specifying unique SIDs within the custom range), I successfully created a rule that generated verifiable entries in the fast.log. This demonstrates my ability to author and deploy custom detection logic.
-![Suricata test.rules file]("\Network config\IDS-Network-Config-2.png")
+![Suricata test.rules file]("\Network-config\IDS-Network-Config-2.png")
 ### 6. Time Synchronization for Accurate Logs
 - **Challenge:** Observing log entries, I noticed that timestamps in fast.log were often incorrect or lagged behind actual events, making correlation with nmap scan times difficult. This indicated a VM clock drift issue.
 - **Solution:** I diagnosed the issue by using the timedatectl command to deduce the problem; I noticed the ntp service was active, but the system clock was not synchronized. I corrected the time synchronization issue by configuring the Ubuntu-IDS VM with a second network adapter (NAT) to provide internet access. I then enabled and configured systemd-timesyncd to use reliable NTP servers (time.cloudflare.com, time.google.com), ensuring the System clock synchronized: yes status. This resulted in accurate timestamps, vital for forensic analysis and event correlation.
-![VirtualBox NAT network settings for IDS Machine]("\Network config\IDS-Network-Config-2.png") 
+![VirtualBox NAT network settings for IDS Machine]("\Network-config\IDS-Network-Config-2.png") 
 ## Conclusion 
 This project successfully established a functional and monitored virtual homelab environment. I gained invaluable hands-on experience in:
 - Virtual machine networking and configuration.
@@ -54,6 +54,6 @@ This project successfully established a functional and monitored virtual homelab
 This foundational lab now serves as a platform for further exploration into advanced threat detection, log analysis, and vulnerability management.
 ## Demonstration
 Here's a quick demonstration of the IDS in action, showing an nmap scan from Kali Linux being detected and logged by Suricata on the Ubuntu-IDS VM.
-![Kali Machine executing an nmap scan to Metasploitable]("\proof of completion\Kali-nmap.png")
-![IDS Machine showing sudo tail /var/log/suricata/fast.log with the generated alerts from the nmap scan]("\proof of completion\IDS-nmap-detection.png")
+![Kali Machine executing an nmap scan to Metasploitable]("\proof-of-completion\Kali-nmap.png")
+![IDS Machine showing sudo tail /var/log/suricata/fast.log with the generated alerts from the nmap scan]("\proof-of-completion\IDS-nmap-detection.png")
 
