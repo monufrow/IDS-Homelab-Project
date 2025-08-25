@@ -7,9 +7,9 @@ Operating Systems:
 - Kali Linux (Attacker VM - 192.168.5.10)
 - Metasploitable2 (Vulnerable Target VM - 192.168.5.20)
 - Ubuntu Server (IDS/Monitor VM - 192.168.5.30)
-IDS Software: Suricata
-Network Scanning: Nmap, Ping
-Documentation and Version Control: Git, Github, and Markdown
+- IDS Software: Suricata
+- Network Scanning: Nmap, Ping
+- Documentation and Version Control: Git, Github, and Markdown
 ## Project Architecture
 The homelab consists of three virtual machines connected on a dedicated Internal Network within VirtualBox (vlab_net), allowing them to communicate with each other while being isolated from the host machine's network. The Ubuntu-IDS VM is configured with a second network adapter (NAT) for internet access, crucial for time synchronization and software updates.
 ![VirtualBox network settings for Attack Machine]("C:\Users\mitch\Documents\IDS-Homelab-Project\Network config\Kali-Network-Config.png") 
