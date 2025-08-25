@@ -43,7 +43,7 @@ Building this homelab was a hands-on learning experience that involved navigatin
 ### 6. Time Synchronization for Accurate Logs
 - **Challenge:** Observing log entries, I noticed that timestamps in fast.log were often incorrect or lagged behind actual events, making correlation with nmap scan times difficult. This indicated a VM clock drift issue.
 - **Solution:** I diagnosed the issue by using the timedatectl command to deduce the problem; I noticed the ntp service was active, but the system clock was not synchronized. I corrected the time synchronization issue by configuring the Ubuntu-IDS VM with a second network adapter (NAT) to provide internet access. I then enabled and configured systemd-timesyncd to use reliable NTP servers (time.cloudflare.com, time.google.com), ensuring the System clock synchronized: yes status. This resulted in accurate timestamps, vital for forensic analysis and event correlation.
-![VirtualBox NAT network settings for IDS Machine]("C:\Users\mitch\Documents\IDS-Homelab-Project\Network config\IDS-Network-Config-2.png") 
+![VirtualBox NAT network settings for IDS Machine]("\Network config\IDS-Network-Config-2.png") 
 ## Conclusion 
 This project successfully established a functional and monitored virtual homelab environment. I gained invaluable hands-on experience in:
 - Virtual machine networking and configuration.
